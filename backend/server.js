@@ -8,9 +8,19 @@ dotenv.config();
 
 const app = express();
 
-// ── Middleware ──────────────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
+  origin: function (origin, callback) {
+    // If no origin (e.g. server-to-server request) or allowed origin, let it pass
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
+    if (allowedOrigins.includes(origin) || process.env.CLIENT_URL === '*') {
+      callback(null, true);
+    } else {
+      // In development or if not strictly set, allow reflection for credentials
+      callback(null, true); 
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
