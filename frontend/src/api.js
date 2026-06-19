@@ -7,6 +7,6 @@
  * - In PRODUCTION → set VITE_API_URL=https://your-backend.onrender.com
  *   in Vercel environment variables. All fetch calls become absolute.
  */
-const BASE = import.meta.env.VITE_API_URL || '';
+const BASE = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '' : 'https://internfullstack-2taskflow-backend.onrender.com');
 
 export const apiUrl = (path) => `${BASE}${path}`;
